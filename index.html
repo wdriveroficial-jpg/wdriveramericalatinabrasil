@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>W-DRIVER AMÉRICA LATINA BRASIL (Sistema Blindado)</title>
+    <meta name="description" content="Sistema Blindado Anti-Fraude e Anti-Calote da W-DRIVER: validação biométrica facial, antecedentes criminais, assinatura digital gov.br, botão W-SOS, radar dinâmico, gravação 360° no-show e W-BANK.">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Ícone SVG Oficial W-DRIVER PWA -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%226%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%226%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>">
+
+    <style>
+        :root {
+            --primary-green: #b2ec5d;
+            --primary-hover: #9ecf4c;
+            --dark-bg: #000000;
+            --card-bg: #121212;
+            --input-bg: #181818;
+            --text-color: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #2e2e2e;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --link-color: #38bdf8;
+            --gov-blue: #1f6feb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 8px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(178, 236, 93, 0.15);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 98vh;
+        }
+
+        header {
+            background: #000000;
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary-green);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 20px;
+            color: var(--primary-green);
+            letter-spacing: 1px;
+            font-weight: 900;
+        }
+
+        header p {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .notification-bell {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--primary-green);
+        }
+
+        .screen-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: none;
+        }
+
+        .screen-content.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: var(--primary-green);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 13px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        button.btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-green);
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button.btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #2a2a2a !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        button.btn-sos {
+            background: var(--danger-color);
+            color: #ffffff;
+            margin-bottom: 12px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 13px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 14px rgba(231, 76, 60, 0.4);
+            transition: background 0.2s;
+        }
+
+        button.btn-sos:hover {
+            background: #c0392b;
+        }
+
+        button.btn-gov {
+            background: var(--gov-blue);
+            color: #ffffff;
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        button.btn-gov:hover {
+            background: #388bfd;
+        }
+
+        .lock-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            background: #000000;
+            border: 2px solid var(--danger-color);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .lock-screen h2 {
+            color: var(--danger-color);
+            border: none;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .lock-screen p {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .map-mock {
+            width: 100%;
+            height: 140px;
+            background: #181818;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            font-size: 11px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .category-item {
+            background: var(--input-bg);
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .category-item.selected {
+            border-color: var(--primary-green);
+            background-color: rgba(178, 236, 93, 0.12);
+            box-shadow: 0 0 10px rgba(178, 236, 93, 0.2);
+        }
+
+        .category-item span {
+            font-size: 13px;
+        }
+
+        .category-item span:last-child {
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        .admin-panel {
+            background: var(--input-bg);
+            border: 1px solid var(--primary-green);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: #000000;
+            padding: 8px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            transition: color 0.2s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            color: var(--primary-green);
+        }
+
+        .nav-tab svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .hidden { display: none !important; }
+        .mt-15 { margin-top: 14px; }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: flex-start;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            cursor: pointer;
+            gap: 8px;
+        }
+        .custom-checkbox input {
+            width: 16px;
+            height: 16px;
+            margin-top: 1px;
+            accent-color: var(--primary-green);
+            flex-shrink: 0;
+        }
+
+        .terms-link {
+            color: var(--link-color);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.88);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .modal-content {
+            background: #121212;
+            border: 1px solid var(--primary-green);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(178, 236, 93, 0.25);
+        }
+        .modal-header {
+            background: #000;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            color: var(--primary-green);
+            font-size: 13px;
+            margin: 0;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .modal-body {
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .modal-body h4 {
+            color: #fff;
+            margin: 10px 0 4px 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>W-DRIVER</h1>
+        <p>América Latina Brasil — Sistema Blindado Anti-Fraude</p>
+        <div class="notification-bell" onclick="alert('Central W-DRIVER: Nenhuma notificação crítica no momento. Operação segura e blindada ativa.')">🔔</div>
+    </header>
+
+    <!-- TELA 1: BOAS-VINDAS E APRESENTAÇÃO -->
+    <div id="screen-welcome" class="screen-content active">
+        <h2>Bem-vindo à Mobilidade Segura</h2>
+        <p>Transporte legal de passageiros e entregas. Plataforma corporativa blindada contra calotes e fraudes operacionais.</p>
+        <p style="font-weight: bold; color: var(--danger-color); text-transform: uppercase; font-size: 11px;">
+            O uso deste aplicativo exige identificação biométrica facial, documentos oficiais, assinatura digital gov.br e checagem de antecedentes. Pagamento garantido via W-BANK.
+        </p>
+        <button class="btn-primary" onclick="goToScreen('screen-register')">Fazer Cadastro / Entrar</button>
+    </div>
+
+    <!-- TELA 2: CADASTRO E VALIDAÇÃO DE SEGURANÇA -->
+    <div id="screen-register" class="screen-content">
+        <h2>Cadastro e Validação de Segurança</h2>
+        <div class="form-group">
+            <label>Nome Completo:</label>
+            <input type="text" id="reg-name" placeholder="Seu nome completo (como no documento)">
+        </div>
+        <div class="form-group">
+            <label>CPF:</label>
+            <input type="text" id="reg-cpf" placeholder="000.000.000-00">
+        </div>
+        <div class="form-group">
+            <label>Telefone (com DDD):</label>
+            <input type="tel" id="reg-phone" placeholder="(83) 99000-0000">
+        </div>
+        <div class="form-group">
+            <label>Naturalidade (Cidade/Estado):</label>
+            <input type="text" id="reg-city" placeholder="Ex: João Pessoa / PB">
+        </div>
+        
+        <div class="mt-15">
+            <h3>Uploads Obrigatórios e Assinatura Digital</h3>
+            <p style="font-size: 10px;">Exigimos documentos legíveis, selfie facial de prova de vida e validação governamental oficial.</p>
+            
+            <div class="form-group">
+                <label>Selfie Facial (Prova de Vida):</label>
+                <input type="file" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Documento (RG ou CNH com EAR para motorista):</label>
+                <input type="file" accept="image/*,application/pdf">
+            </div>
+            <div class="form-group">
+                <label>Antecedentes Criminais (Federal + Estadual):</label>
+                <input type="file" multiple accept="image/*,application/pdf">
+            </div>
+
+            <!-- Assinatura Digital gov.br -->
+            <div class="form-group">
+                <label>Termo de Adesão e Contrato (Assinatura Digital):</label>
+                <button type="button" class="btn-gov" onclick="assinarGovBr()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-5h2v5h-2zm0-7v-2h2v2h-2z"/></svg>
+                    Assinar Digitalmente via gov.br
+                </button>
+                <p style="font-size: 10px; color: var(--primary-green); margin-top: 4px;" id="gov-status">Status: Aguardando assinatura digital oficial.</p>
+            </div>
+
+            <!-- Termos de Uso -->
+            <label class="custom-checkbox mt-15">
+                <input type="checkbox" id="check-terms">
+                <span>Declaro que li e aceito os <span class="terms-link" onclick="abrirTermos(event)">Termos de Uso, a Política de Privacidade e as Normas de Segurança Anti-Calote</span> da W-DRIVER.</span>
+            </label>
+        </div>
+
+        <button class="btn-primary" id="btn-submit-register" disabled onclick="enviarCadastro()">Enviar Documentos para Central</button>
+    </div>
+
+    <!-- TELA 3: BLOQUEIO PREVENTIVO -->
+    <div id="screen-locked" class="screen-content lock-screen hidden">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--danger-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <h2>CADASTRO EM ANÁLISE</h2>
+        <p>Sua biometria, documentos e assinatura gov.br estão sendo validados pela Central W-DRIVER. Prazo estimado: até 48h.</p>
+        <p style="margin-top: 8px; color: var(--warning-color); font-size: 12px;">Nenhuma corrida será liberada até a aprovação total.</p>
+        <button class="btn-primary mt-15" style="background: #fff; color: #000;" onclick="goToScreen('screen-welcome')">Voltar ao Início</button>
+    </div>
+
+    <!-- TELA 4: TELA PRINCIPAL DO PASSAGEIRO -->
+    <div id="screen-home" class="screen-content hidden">
+        <button class="btn-sos" onclick="triggerSOS()">🚨 ACIONAR W-SOS (EMERGÊNCIA)</button>
+        
+        <div class="map-mock">
+            <span>📍 GPS W-DRIVER Ativo — Rota Segura Criptografada</span>
+        </div>
+
+        <div class="form-group">
+            <label>Onde você está?</label>
+            <input type="text" value="Localização atual detectada via GPS" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Para onde vamos? (Destino Obrigatório):</label>
+            <input type="text" id="dest-input" placeholder="Digite o endereço exato de destino...">
+        </div>
+
+        <h3>Escolha a Categoria (Até 4 km + 3 min inclusos)</h3>
+        <div class="category-list">
+            <div class="category-item selected" onclick="selectCategory(this, 'W-BIKE', '6.00')">
+                <span>🛵 W-BIKE</span>
+                <span>R$ 6,00</span>
+            </div>
+            <div class="category-item" onclick="selectCategory(this, 'W-MOTO', '6.00')">
+                <span>🏍️ W-MOTO</span>
+                <span>R$ 6,00</span>
+            </div>
+            <div class="category-item" onclick="selectCategory(this, 'W-CARRO', '8.00')">
+                <span>🚗 W-CARRO</span>
+                <span>R$ 8,00</span>
+            </div>
+            <div class="category-item" onclick="selectCategory(this, 'W-TÁXI', '10.00')">
+                <span>🚕 W-TÁXI (Oficial Inmetro)</span>
+                <span>R$ 10,00</span>
+            </div>
+            <div class="category-item" onclick="selectCategory(this, 'W-EXECUTIVO', '12.00')">
+                <span>🚘 W-EXECUTIVO (7 Lugares)</span>
+                <span>R$ 12,00</span>
+            </div>
+            <div class="category-item" onclick="selectCategory(this, 'W-LUXO', 'Contrato')">
+                <span>🚙 W-LUXO</span>
+                <span>Por Contrato</span>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="confirmarPagamentoEGarantia()">Confirmar Pagamento Prévio e Chamar</button>
+    </div>
+
+    <!-- TELA 5: MODO MOTORISTA -->
+    <div id="screen-driver" class="screen-content hidden">
+        <h2>Painel do Motorista — Seguro</h2>
+        <div style="background: #181818; padding: 10px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid var(--primary-green);">
+            <p style="color: #fff; font-size: 12px; margin: 0;">Status: <strong>Online Protegido (🟢)</strong></p>
+        </div>
+
+        <div class="map-mock">
+            <span>📡 Varredura de Frotas e Chamadas com W-BANK Garantido...</span>
+        </div>
+
+        <div style="background: #181818; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <h3>Corrida Ativa Atribuída</h3>
+            <p><strong>Origem:</strong> Ponto de Partida Verificado</p>
+            <p><strong>Destino:</strong> Destino Informado pelo Cliente</p>
+            <p style="color: var(--primary-green);"><strong>Valor Garantido:</strong> Crédito Prévio W-BANK</p>
+            
+            <div class="mt-15">
+                <p style="font-size: 11px; color: var(--warning-color); font-weight: bold;">Espera no local (Cronômetro Limite: 03:00 min):</p>
+                <div style="font-size: 24px; font-weight: 900; text-align: center; color: var(--primary-green); margin: 8px 0; font-family: monospace;" id="timer-display">03:00</div>
+                
+                <button class="btn-sos" onclick="registrarNoShow()" style="margin-top: 5px;">🚨 Passageiro Ausente — Gravar Vídeo 360°</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 6: CENTRAL ADMINISTRATIVA -->
+    <div id="screen-admin" class="screen-content hidden">
+        <h2>Painel Administrativo Central</h2>
+        <p style="font-size: 10px;">Gestão de frotas, segurança e antifraude regional.</p>
+
+        <div class="admin-panel">
+            <h3 style="color: var(--primary-green); font-size: 13px; margin-bottom: 6px;">Dinâmica Regional de Tarifa</h3>
+            <div class="form-group" style="margin-bottom: 8px;">
+                <label>Fator Multiplicador (Pico / Chuva):</label>
+                <select id="dynamic-multiplier">
+                    <option>1.0x (Normal)</option>
+                    <option>1.5x (Atenção / Pico)</option>
+                    <option>2.0x (Chuva / Máximo)</option>
+                    <option>3.5x (Temporal / Demanda Extrema)</option>
+                </select>
+            </div>
+            <button class="btn-primary" style="margin-top: 4px; padding: 10px;" onclick="alert('Tarifa dinâmica aplicada com sucesso na região!')">Aplicar Dinâmica</button>
+        </div>
+
+        <div class="admin-panel">
+            <h3 style="color: var(--danger-color); font-size: 13px; margin-bottom: 6px;">Auditoria e Segurança</h3>
+            <button class="btn-sos" style="padding: 10px; font-size: 12px; margin-bottom: 8px;" onclick="alert('Painel de Bloqueio: CPF / Dispositivo banido com sucesso.')">Auditar e Banir Inseguros</button>
+            <button class="btn-primary" style="background: #222; color: #fff; margin-top: 0; padding: 10px;" onclick="alert('Auditoria W-BANK: Transações 100% blindadas e auditadas.')">Auditar Extratos W-BANK (90% Repasse)</button>
+        </div>
+    </div>
+
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <div class="nav-tabs" id="bottom-nav">
+        <button class="nav-tab active" onclick="switchTab('screen-home', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Início
+        </button>
+        <button class="nav-tab" onclick="switchTab('screen-register', this)">
+            <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            Cadastro
+        </button>
+        <button class="nav-tab" onclick="switchTab('screen-driver', this)">
+            <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.76l.12.34V17z"/></svg>
+            Motorista
+        </button>
+        <button class="nav-tab" onclick="switchTab('screen-admin', this)">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            Central
+        </button>
+    </div>
+</div>
+
+<!-- MODAL DOS TERMOS DE USO -->
+<div id="terms-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Termos de Uso e Normas W-DRIVER</h3>
+            <button class="close-modal" onclick="fecharTermos()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h4>1. Aceitação dos Termos e Condições</h4>
+            <p>Ao se cadastrar na plataforma W-DRIVER América Latina Brasil, o usuário (motorista ou passageiro) concorda integralmente com as normas de segurança, compliance e antifraude estipuladas pela central.</p>
+            
+            <h4>2. Sistema Anti-Calote e W-BANK</h4>
+            <p>Todas as corridas e solicitações exigem pagamento prévio ou garantia digital via W-BANK. Fica expressamente proibida a recusa de pagamento ou fraudes de cancelamento sob pena de bloqueio definitivo do CPF e acionamento jurídico.</p>
+
+            <h4>3. Validação Biométrica e Documental</h4>
+            <p>O cadastro requer envio de documentos válidos (RG/CNH com EAR para motoristas), antecedentes criminais federais e estaduais, selfie com prova de vida e assinatura digital autenticada via gov.br.</p>
+
+            <h4>4. Segurança e Monitoramento 360°</h4>
+            <p>Em caso de ausência do passageiro (no-show), o motorista deve acionar o cronômetro de 3 minutos e realizar gravação de vídeo 360° ao redor do veículo para resguardo de taxas e auditoria da Central.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const checkTerms = document.getElementById('check-terms');
+    const btnSubmitRegister = document.getElementById('btn-submit-register');
+    let govAssinado = false;
+
+    if (checkTerms) {
+        checkTerms.addEventListener('change', function() {
+            validarFormularioCadastro();
+        });
+    }
+
+    function validarFormularioCadastro() {
+        if (checkTerms && checkTerms.checked && govAssinado) {
+            btnSubmitRegister.disabled = false;
+        } else if (btnSubmitRegister) {
+            btnSubmitRegister.disabled = true;
+        }
+    }
+
+    function abrirTermos(event) {
+        if (event) event.preventDefault();
+        document.getElementById('terms-modal').style.display = 'flex';
+    }
+
+    function fecharTermos() {
+        document.getElementById('terms-modal').style.display = 'none';
+    }
+
+    function goToScreen(screenId) {
+        document.querySelectorAll('.screen-content').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(screenId);
+        if (target) target.classList.add('active');
+        
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+        if(screenId === 'screen-home' || screenId === 'screen-welcome') {
+            document.querySelectorAll('.nav-tab')[0].classList.add('active');
+        } else if(screenId === 'screen-register' || screenId === 'screen-locked') {
+            document.querySelectorAll('.nav-tab')[1].classList.add('active');
+        } else if(screenId === 'screen-driver') {
+            document.querySelectorAll('.nav-tab')[2].classList.add('active');
+        } else if(screenId === 'screen-admin') {
+            document.querySelectorAll('.nav-tab')[3].classList.add('active');
+        }
+    }
+
+    function switchTab(screenId, tabElement) {
+        document.querySelectorAll('.screen-content').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(screenId);
+        if (target) target.classList.add('active');
+
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+        if (tabElement) tabElement.classList.add('active');
+    }
+
+    function assinarGovBr() {
+        alert('Redirecionando para o ambiente seguro de assinatura digital gov.br...');
+        setTimeout(() => {
+            govAssinado = true;
+            const statusEl = document.getElementById('gov-status');
+            if (statusEl) {
+                statusEl.innerText = 'Status: Assinado digitalmente via gov.br (Válido e Autenticado ✅)';
+                statusEl.style.color = 'var(--primary-green)';
+            }
+            validarFormularioCadastro();
+        }, 1500);
+    }
+
+    function enviarCadastro() {
+        alert('Cadastro enviado com sucesso! Seus documentos, biometria e assinatura gov.br foram encaminhados para análise da Central W-DRIVER.');
+        goToScreen('screen-locked');
+    }
+
+    function selectCategory(element, name, price) {
+        document.querySelectorAll('.category-item').forEach(el => el.classList.remove('selected'));
+        if (element) element.classList.add('selected');
+    }
+
+    function confirmarPagamentoEGarantia() {
+        const destInput = document.getElementById('dest-input');
+        const destino = destInput ? destInput.value : '';
+        if(!destino || destino.trim() === '') {
+            alert('Por favor, informe o endereço de destino obrigatório.');
+            return;
+        }
+        alert('Pagamento pré-aprovado via W-BANK! Buscando motorista verificado mais próximo...');
+    }
+
+    function triggerSOS() {
+        if(confirm('ATENÇÃO: Deseja acionar imediatamente a Central W-SOS e compartilhar geolocalização com autoridades?')) {
+            alert('Alerta W-SOS disparado com sucesso! A Central já está monitorando.');
+        }
+    }
+
+    function registrarNoShow() {
+        if(confirm('Deseja iniciar a gravação do vídeo 360° para comprovar ausência do passageiro e garantir sua taxa no W-BANK?')) {
+            alert('Câmera de segurança ativada: Grave 360° ao redor do veículo. Taxa creditada automaticamente no W-BANK.');
+        }
+    }
+</script>
+</body>
+</html>
