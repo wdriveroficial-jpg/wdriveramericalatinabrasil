@@ -1,25 +1,837 @@
-<!doctype html>
-<html lang="pt-BR" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>W-DRIVER - Mobilidade Urbana</title>
-    <meta name="description" content="Plataforma oficial de mobilidade urbana W-DRIVER em João Pessoa - PB: solicitação de corridas por passageiro, radar de dinâmica em tempo real para motoristas, cobrança PIX instantânea com divisão de repasse (90%), central 24h e suporte a todas as categorias regulamentadas." />
-    <meta property="og:title" content="W-DRIVER - Mobilidade Urbana" />
-    <meta property="og:description" content="Plataforma oficial de mobilidade urbana W-DRIVER em João Pessoa - PB: solicitação de corridas por passageiro, radar de dinâmica em tempo real para motoristas, cobrança PIX instantânea com divisão de repasse (90%), central 24h e suporte a todas as categorias regulamentadas." />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#0a0a0a" />
-    
-    <!-- Ícone SVG Oficial W-DRIVER -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%225%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%225%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>" />
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>W-DRIVER - Plataforma Oficial de Mobilidade Urbana</title>
+    <meta name="description" content="W-DRIVER João Pessoa - PB: App Passageiro, Motorista, Radar Dinâmico, Pagamento PIX e Central 24h.">
+    <meta name="theme-color" content="#0a0a0a">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#0a0a0a] text-neutral-100 antialiased selection:bg-lime-400 selection:text-black">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <!-- Ícone SVG Oficial W-DRIVER PWA -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%226%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%226%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>">
+
+    <style>
+        :root {
+            --primary: #a3e635; /* Verde Lima Oficial W-DRIVER */
+            --primary-hover: #bef264;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-input: #1f1f1f;
+            --border-color: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dynamic-blue: #38bdf8;
+            --pix-color: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #112206;
+            border: 2px solid var(--primary);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.25rem;
+            color: var(--primary);
+            box-shadow: 0 0 10px rgba(163, 230, 53, 0.25);
+        }
+
+        .logo-text {
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .app-tabs {
+            display: flex;
+            gap: 0.4rem;
+            background: #111411;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            position: sticky;
+            top: 59px;
+            z-index: 90;
+        }
+
+        .tab-btn {
+            background: #1e1e1e;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            border-color: #3f3f46;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(163, 230, 53, 0.35);
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        @media (max-width: 960px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.35rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.85rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+            color: var(--text-muted);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-option {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-option:hover {
+            border-color: #52525b;
+        }
+
+        .category-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(163, 230, 53, 0.08);
+            box-shadow: 0 0 14px rgba(163, 230, 53, 0.15);
+        }
+
+        .category-name {
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+
+        .category-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .simulation-result {
+            background-color: #171d15;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(163, 230, 53, 0.3);
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .result-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--primary);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--primary);
+            color: #050802;
+            font-weight: 800;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            margin-top: 0.85rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #27272a;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #3f3f46;
+        }
+
+        /* RADAR DINÂMICO */
+        .radar-map-container {
+            width: 100%;
+            height: 330px;
+            background: #090e13;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .radar-bg-lines {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                radial-gradient(circle, rgba(56,189,248,0.25) 12%, transparent 22%),
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px, 30px 30px, 30px 30px;
+        }
+
+        .heat-zone-blue {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle, rgba(56,189,248,0.45) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .heat-zone-green {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(163,230,53,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .dynamic-badge-price {
+            position: absolute;
+            background: var(--primary);
+            color: #000;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            box-shadow: 0 0 10px rgba(163,230,53,0.5);
+            z-index: 10;
+        }
+
+        .dynamic-badge-blue {
+            position: absolute;
+            background: var(--dynamic-blue);
+            color: #000;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            box-shadow: 0 0 10px rgba(56,189,248,0.5);
+            z-index: 10;
+        }
+
+        .radar-center-target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 2px dashed var(--dynamic-blue);
+            border-radius: 50%;
+            animation: radarPulse 2s infinite linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar-center-dot {
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 14px var(--primary);
+        }
+
+        @keyframes radarPulse {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+        }
+
+        .radar-footer-cards {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            z-index: 20;
+        }
+
+        .radar-mini-card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .radar-mini-card.active-card {
+            border-color: var(--primary);
+            background: rgba(16, 26, 10, 0.95);
+        }
+
+        .flow-screen { display: none; }
+        .flow-screen.active { display: block; }
+
+        .pix-box {
+            background: #09090b;
+            border: 2px dashed var(--pix-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 0.85rem 0;
+        }
+
+        .qr-placeholder {
+            width: 130px;
+            height: 130px;
+            background: #fff;
+            margin: 0 auto 0.75rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 800;
+            color: #000;
+            font-size: 0.8rem;
+        }
+
+        .map-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+        }
+
+        .map-btn {
+            background: #27272a;
+            border: 1px solid var(--border-color);
+            padding: 0.65rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .map-btn:hover {
+            border-color: var(--primary);
+            background: #3f3f46;
+        }
+
+        .features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            font-size: 0.85rem;
+        }
+
+        .features-list li {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+        }
+
+        .features-list span {
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area" onclick="mudarTela('passageiro')">
+            <div class="logo-icon">W</div>
+            <div class="logo-text">W-<span>DRIVER</span></div>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+            📍 João Pessoa - PB | Central 24h
+        </div>
+    </header>
+
+    <!-- ABAS DE NAVEGAÇÃO -->
+    <div class="app-tabs">
+        <button class="tab-btn active" onclick="mudarTela('passageiro')">1. 📱 App Passageiro</button>
+        <button class="tab-btn" onclick="mudarTela('pagamento')">2. 💳 PIX / QR Code</button>
+        <button class="tab-btn" onclick="mudarTela('central')">3. 🏢 Central W-DRIVER</button>
+        <button class="tab-btn" onclick="mudarTela('motorista')">4. 🏍️ App Motorista (Radar)</button>
+    </div>
+
+    <main>
+        <!-- COLUNA ESQUERDA: TELAS DO APP -->
+        <div class="card">
+            
+            <!-- TELA 1: PASSAGEIRO -->
+            <div id="telaPassageiro" class="flow-screen active">
+                <h2>📱 Solicitação de Viagem W-DRIVER</h2>
+                
+                <div class="form-group">
+                    <label for="origemInput">Local de Partida (Origem)</label>
+                    <input type="text" id="origemInput" value="Busto de Tamandaré, Cabo Branco" oninput="atualizarCalculo()">
+                </div>
+
+                <div class="form-group">
+                    <label for="destinoInput">Local de Chegada (Destino)</label>
+                    <input type="text" id="destinoInput" value="Manaíra Shopping, Zona Leste" oninput="atualizarCalculo()">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputKm">Distância Estimada (Km):</label>
+                    <input type="number" id="inputKm" value="8.3" step="0.1" min="1" oninput="atualizarCalculo()">
+                </div>
+
+                <div class="form-group">
+                    <label>Escolha a Categoria Oficial</label>
+                    <div class="categories-grid">
+                        <div class="category-option selected" onclick="selecionarCat(this, 'W-MOTO Comum', 6.00, 0.55)">
+                            <div class="category-name">W-MOTO Comum</div>
+                            <div class="category-desc">Fixa 4km: R$ 6,00 | R$ 0,55/km</div>
+                        </div>
+                        <div class="category-option" onclick="selecionarCat(this, 'W-BIKE', 6.00, 0.55)">
+                            <div class="category-name">W-BIKE</div>
+                            <div class="category-desc">Fixa 4km: R$ 6,00 | R$ 0,55/km</div>
+                        </div>
+                        <div class="category-option" onclick="selecionarCat(this, 'W-CARRO Comum', 8.00, 1.75)">
+                            <div class="category-name">W-CARRO Comum</div>
+                            <div class="category-desc">Fixa 4km: R$ 8,00 | R$ 1,75/km</div>
+                        </div>
+                        <div class="category-option" onclick="selecionarCat(this, 'W-CARRO Executivo', 12.00, 3.00)">
+                            <div class="category-name">W-CARRO Executivo</div>
+                            <div class="category-desc">Fixa 4km: R$ 12,00 | R$ 3,00/km</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(56,189,248,0.1); border: 1px solid var(--dynamic-blue); padding: 0.6rem 0.85rem; border-radius: 10px; margin-bottom: 0.85rem;">
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: bold; color: #7dd3fc;">⚡ Tarifa Dinâmica 3.5x</div>
+                        <div style="font-size: 0.7rem; color: #bae6fd;">Chuva intensa e pico de demanda</div>
+                    </div>
+                    <button class="tab-btn" onclick="alternarDinamica()" id="btnDinSwitch" style="background: var(--dynamic-blue); color: #000; font-weight: 800;">Ativar</button>
+                </div>
+
+                <div class="simulation-result">
+                    <div class="result-row">
+                        <span>Trajeto & Modalidade:</span>
+                        <strong id="resCatDist" style="color: #fff;">8.3 km | W-MOTO Comum</strong>
+                    </div>
+                    <div class="result-row">
+                        <span>Repasse Motorista (90%):</span>
+                        <span id="resRepasse" style="color: var(--primary); font-weight: 700;">R$ 7,47</span>
+                    </div>
+                    <div class="result-total">
+                        <span>Total da Corrida:</span>
+                        <span id="resTotal">R$ 8,30</span>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="irParaPagamento()">Prosseguir para Pagamento PIX ➔</button>
+            </div>
+
+            <!-- TELA 2: PAGAMENTO PIX / QR CODE -->
+            <div id="telaPagamento" class="flow-screen">
+                <h2>💳 Pagamento PIX Instantâneo</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+                    Escaneie o QR Code ou utilize o código Copia e Cola para validação imediata na Central W-DRIVER.
+                </p>
+                
+                <div class="pix-box">
+                    <div class="qr-placeholder">
+                        <span style="font-size: 0.65rem; color: #71717a; text-transform: uppercase;">QR CODE PIX</span>
+                        <span id="pixValorDisplay" style="color: #10b981; font-size: 1.15rem; font-weight: 900; margin-top: 4px;">R$ 8,30</span>
+                    </div>
+                    <label style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Código PIX Copia e Cola:</label>
+                    <input type="text" readonly value="00020126580014br.gov.bcb.pix0136wdriver.jp.830" style="font-size: 0.75rem; text-align: center; background: #000; color: var(--pix-color); font-weight: bold;">
+                </div>
+
+                <button class="btn" onclick="simularPagamentoCentral()">Simular Confirmação do Pagamento</button>
+                <button class="btn btn-secondary" onclick="mudarTela('passageiro')" style="margin-top: 0.4rem;">Voltar ao App Passageiro</button>
+            </div>
+
+            <!-- TELA 3: CENTRAL W-DRIVER -->
+            <div id="telaCentral" class="flow-screen">
+                <h2>🏢 Central de Controle 24h</h2>
+                
+                <div style="background: #111; padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 0.85rem; font-size: 0.85rem;">
+                    <div style="font-weight: 800; color: var(--primary); margin-bottom: 0.4rem;">📥 Corrida Aguardando Liberação:</div>
+                    <div style="margin-bottom: 0.2rem;">Origem: <strong id="centralOrigem" style="color: #fff;">Busto de Tamandaré</strong></div>
+                    <div style="margin-bottom: 0.2rem;">Destino: <strong id="centralDestino" style="color: #fff;">Manaíra Shopping</strong></div>
+                    <div style="margin-bottom: 0.2rem;">Total / Repasse Líquido: <strong id="centralValor" style="color: var(--primary);">R$ 8,30 (Motorista: R$ 7,47)</strong></div>
+                    <div>Status Financeiro: <strong id="centralStatusPix" style="color: var(--warning);">Aguardando...</strong></div>
+                </div>
+
+                <button class="btn" id="btnLiberarViagem" onclick="liberarParaMotorista()" style="background-color: var(--warning); color: #000;">Confirmar Pagamento e Despachar ao Motorista</button>
+                <button class="btn btn-secondary" onclick="mudarTela('motorista')" style="margin-top: 0.4rem;">Abrir Radar do Motorista ➔</button>
+            </div>
+
+            <!-- TELA 4: APP MOTORISTA (RADAR COM DINÂMICA) -->
+            <div id="telaMotorista" class="flow-screen">
+                <h2>🏍️ Radar do Motorista Parceiro</h2>
+                
+                <div class="radar-map-container" id="radarMapVisual">
+                    <div class="radar-bg-lines"></div>
+                    
+                    <div class="heat-zone-blue" style="top: 15%; left: 10%;"></div>
+                    <div class="dynamic-badge-blue" style="top: 22%; left: 15%;">+R$ 15</div>
+
+                    <div class="heat-zone-blue" style="top: 35%; right: 15%;"></div>
+                    <div class="dynamic-badge-blue" style="top: 40%; right: 20%;">+R$ 30</div>
+
+                    <div class="heat-zone-green" style="top: 55%; left: 35%;"></div>
+                    <div class="dynamic-badge-price" style="top: 58%; left: 42%;">+R$ 30</div>
+
+                    <div class="heat-zone-blue" style="top: 70%; left: 20%;"></div>
+                    <div class="dynamic-badge-blue" style="top: 75%; left: 25%;">+R$ 40</div>
+
+                    <div class="radar-center-target">
+                        <div class="radar-center-dot"></div>
+                    </div>
+                    <div class="dynamic-badge-price" style="top: 42%; left: 52%; background: var(--primary);">⚡ 3,5x</div>
+
+                    <div class="radar-footer-cards">
+                        <div class="radar-mini-card active-card">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: var(--primary);">W-MOTO</div>
+                            <div style="font-size: 0.85rem; font-weight: 800; color: #fff;" id="motoRadarPreco">R$ 21,00 - 3,5x</div>
+                        </div>
+                        <div class="radar-mini-card">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted);">W-CARRO</div>
+                            <div style="font-size: 0.85rem; font-weight: 800; color: #fff;" id="carroRadarPreco">R$ 42,00 - 3,5x</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="motoristaAguardando" style="background: #111; padding: 1rem; border-radius: 10px; text-align: center; border: 1px solid var(--border-color); font-size: 0.85rem;">
+                    <p style="color: var(--text-muted);">Radar de trânsito e chuva ativo. Aguardando liberação de corrida paga pela Central...</p>
+                </div>
+
+                <div id="motoristaCorrida" style="display: none; background: #111; padding: 1rem; border-radius: 10px; border: 1px solid var(--primary); font-size: 0.85rem;">
+                    <div style="font-weight: 900; color: var(--primary); margin-bottom: 0.4rem;">🚨 Nova Corrida Liberada pela Central!</div>
+                    <div style="margin-bottom: 0.2rem;"><strong>Buscar em:</strong> <span id="motOrigemTxt">Busto de Tamandaré</span></div>
+                    <div style="margin-bottom: 0.2rem;"><strong>Levar até:</strong> <span id="motDestinoTxt">Manaíra Shopping</span></div>
+                    <div style="margin-bottom: 0.5rem;"><strong>Seu Ganho Líquido (90%):</strong> <span id="motGanhoTxt" style="color: var(--primary); font-weight: 900;">R$ 7,47</span></div>
+
+                    <label style="margin-top: 0.5rem; margin-bottom: 0.3rem;">Abrir Navegador GPS:</label>
+                    <div class="map-selector-grid">
+                        <button class="map-btn" onclick="abrirNavegador('Google Maps')">Google Maps</button>
+                        <button class="map-btn" onclick="abrirNavegador('Waze')">Waze</button>
+                        <button class="map-btn" onclick="abrirNavegador('Outro GPS')">Outro GPS</button>
+                    </div>
+
+                    <button class="btn" onclick="finalizarCorrida()" style="margin-top: 0.6rem; font-size: 0.85rem;">🏁 Chegamos ao Destino (Concluir Viagem)</button>
+                    <button class="btn" onclick="cancelarCorridaMotorista()" style="background-color: var(--danger); color: #fff; margin-top: 0.4rem; font-size: 0.85rem;">Cancelar Corrida (Antes do Embarque)</button>
+                </div>
+
+                <div id="statusFimViagem" style="margin-top: 0.6rem; font-size: 0.85rem; text-align: center;"></div>
+            </div>
+
+        </div>
+
+        <!-- COLUNA DIREITA: DIRETRIZES TÉCNICAS E REGRAS -->
+        <div class="card">
+            <h2>🛡️ Diretrizes W-DRIVER Ativas</h2>
+            <ul class="features-list">
+                <li>
+                    <span>✓</span>
+                    <div><strong>Ícone do Aplicativo (PWA Mobile):</strong> Configurado para exibir o logotipo oficial "W" com a rodovia verde automaticamente na tela inicial do celular.</div>
+                </li>
+                <li>
+                    <span>✓</span>
+                    <div><strong>Cálculo Tarifário Regulamentado:</strong> Franquia fixa justa até 4 km e quilometragem adicional perfeitamente tarifada por categoria.</div>
+                </li>
+                <li>
+                    <span>✓</span>
+                    <div><strong>Radar Dinâmico em Tempo Real:</strong> Zonas de calor com acréscimos proporcionais (+R$ 15, +R$ 20, +R$ 30, +R$ 40) para valorizar os motoristas em momentos de chuva ou trânsito intenso.</div>
+                </li>
+                <li>
+                    <span>✓</span>
+                    <div><strong>Repasse de 90% via W-BANK:</strong> O motorista parceiro recebe 90% líquidos diretamente com saque instantâneo via PIX.</div>
+                </li>
+                <li>
+                    <span>✓</span>
+                    <div><strong>Modo Táxi Regulamentado (Inmetro):</strong> Cobrança estrita conforme aferição do taxímetro legal.</div>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        const dadosApp = {
+            origem: 'Busto de Tamandaré, Cabo Branco',
+            destino: 'Manaíra Shopping, Zona Leste',
+            km: 8.3,
+            categoriaNome: 'W-MOTO Comum',
+            base: 6.00,
+            kmAdicional: 0.55,
+            dinamicaAtiva: false,
+            total: 8.30,
+            motoristaGanho: 7.47
+        };
+
+        function mudarTela(nomeTela) {
+            document.querySelectorAll('.flow-screen').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            const telas = {
+                passageiro: { id: 'telaPassageiro', tabIndex: 0 },
+                pagamento:  { id: 'telaPagamento',  tabIndex: 1 },
+                central:    { id: 'telaCentral',    tabIndex: 2 },
+                motorista:  { id: 'telaMotorista',  tabIndex: 3 }
+            };
+
+            const target = telas[nomeTela];
+            if (target) {
+                document.getElementById(target.id).classList.add('active');
+                document.querySelectorAll('.tab-btn')[target.tabIndex].classList.add('active');
+            }
+        }
+
+        function alternarDinamica() {
+            dadosApp.dinamicaAtiva = !dadosApp.dinamicaAtiva;
+            const btn = document.getElementById('btnDinSwitch');
+            if (dadosApp.dinamicaAtiva) {
+                btn.innerText = 'Ativa (3.5x)';
+                btn.style.background = 'var(--primary)';
+                btn.style.color = '#000';
+            } else {
+                btn.innerText = 'Ativar';
+                btn.style.background = 'var(--dynamic-blue)';
+                btn.style.color = '#000';
+            }
+            atualizarCalculo();
+        }
+
+        function selecionarCat(elemento, nome, base, kmAdicional) {
+            dadosApp.categoriaNome = nome;
+            dadosApp.base = base;
+            dadosApp.kmAdicional = kmAdicional;
+
+            document.querySelectorAll('.category-option').forEach(el => el.classList.remove('selected'));
+            elemento.classList.add('selected');
+            atualizarCalculo();
+        }
+
+        function atualizarCalculo() {
+            dadosApp.origem = document.getElementById('origemInput').value;
+            dadosApp.destino = document.getElementById('destinoInput').value;
+            dadosApp.km = parseFloat(document.getElementById('inputKm').value) || 0;
+
+            let total = 0;
+            if (dadosApp.km <= 4) {
+                total = dadosApp.base;
+            } else {
+                const excedente = dadosApp.km - 4;
+                total = dadosApp.base + (excedente * dadosApp.kmAdicional);
+            }
+
+            if (dadosApp.dinamicaAtiva) {
+                total *= 3.5; 
+            }
+
+            dadosApp.total = total;
+            dadosApp.motoristaGanho = total * 0.90;
+
+            document.getElementById('resCatDist').innerText = `${dadosApp.km.toFixed(1)} km | ${dadosApp.categoriaNome}`;
+            document.getElementById('resRepasse').innerText = `R$ ${dadosApp.motoristaGanho.toFixed(2).replace('.', ',')}`;
+            document.getElementById('resTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('pixValorDisplay').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+            document.getElementById('centralOrigem').innerText = dadosApp.origem;
+            document.getElementById('centralDestino').innerText = dadosApp.destino;
+            document.getElementById('centralValor').innerText = `R$ ${total.toFixed(2).replace('.', ',')} (Motorista: R$ ${dadosApp.motoristaGanho.toFixed(2).replace('.', ',')})`;
+
+            document.getElementById('motoRadarPreco').innerText = `R$ ${(total).toFixed(2).replace('.', ',')} - 3,5x`;
+            document.getElementById('carroRadarPreco').innerText = `R$ ${(total * 1.5).toFixed(2).replace('.', ',')} - 3,5x`;
+
+            document.getElementById('motOrigemTxt').innerText = dadosApp.origem;
+            document.getElementById('motDestinoTxt').innerText = dadosApp.destino;
+            document.getElementById('motGanhoTxt').innerText = `R$ ${dadosApp.motoristaGanho.toFixed(2).replace('.', ',')}`;
+        }
+
+        function irParaPagamento() {
+            mudarTela('pagamento');
+        }
+
+        function simularPagamentoCentral() {
+            document.getElementById('centralStatusPix').innerText = '✅ Pago e Confirmado';
+            document.getElementById('centralStatusPix').style.color = 'var(--primary)';
+            alert('Pagamento PIX identificado com sucesso pela Central W-DRIVER!');
+            mudarTela('central');
+        }
+
+        function liberarParaMotorista() {
+            alert('Viagem despachada com sucesso para o Radar do Motorista!');
+            document.getElementById('motoristaAguardando').style.display = 'none';
+            document.getElementById('motoristaCorrida').style.display = 'block';
+            mudarTela('motorista');
+        }
+
+        function abrirNavegador(nomeMap) {
+            const dest = encodeURIComponent(dadosApp.origem);
+            let url = `https://www.google.com/maps/search/?api=1&query=${dest}`;
+            if (nomeMap === 'Waze') {
+                url = `https://waze.com/ul?q=${dest}`;
+            }
+            window.open(url, '_blank');
+        }
+
+        function finalizarCorrida() {
+            document.getElementById('statusFimViagem').innerHTML = '✅ <strong style="color: var(--primary);">Viagem concluída com sucesso!</strong> 90% creditados no W-BANK.';
+            alert('Viagem finalizada com sucesso! Repasse de 90% creditado na conta W-BANK do motorista.');
+        }
+
+        function cancelarCorridaMotorista() {
+            document.getElementById('statusFimViagem').innerHTML = '❌ <strong style="color: var(--danger);">Cancelado pelo motorista antes do embarque.</strong> Nenhum valor cobrado.';
+            alert('Cancelamento registrado antes do embarque.');
+            document.getElementById('motoristaCorrida').style.display = 'none';
+            document.getElementById('motoristaAguardando').style.display = 'block';
+        }
+
+        window.onload = function() {
+            atualizarCalculo();
+        };
+    </script>
+</body>
 </html>
