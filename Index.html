@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>W-DRIVER - Plataforma Oficial de Mobilidade Urbana</title>
+    <meta name="theme-color" content="#0a0a0a">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230d1705%22 stroke=%22%2384cc16%22 stroke-width=%226%22/><path d=%22M22 28 L35 76 L48 44 L60 76 L78 28 L64 28 L54 62 L43 32 L34 62 L28 28 Z%22 fill=%22%23a3e635%22/><path d=%22M32 76 Q50 35 78 28%22 stroke=%22%23ffffff%22 stroke-width=%224%22 stroke-dasharray=%224 4%22 fill=%22none%22/></svg>">
+
+    <style>
+        :root {
+            --primary: #a3e635;
+            --primary-hover: #bef264;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-input: #1f1f1f;
+            --border-color: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dynamic-blue: #38bdf8;
+            --pix-color: #34d399;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.85rem 1.5rem; backdrop-filter: blur(8px);
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
+        .logo-icon {
+            width: 36px; height: 36px; background: #112206; border: 2px solid var(--primary);
+            border-radius: 9px; display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 1.25rem; color: var(--primary);
+        }
+        .logo-text { font-size: 1.15rem; font-weight: 900; color: var(--text-main); }
+        .logo-text span { color: var(--primary); }
+
+        .app-tabs {
+            display: none; /* Só aparece após login validado */
+            gap: 0.4rem; background: #111411; padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color); overflow-x: auto;
+            position: sticky; top: 59px; z-index: 90;
+        }
+        .tab-btn {
+            background: #1e1e1e; border: 1px solid var(--border-color); color: var(--text-muted);
+            padding: 0.55rem 0.9rem; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.8rem; white-space: nowrap;
+        }
+        .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+        main { max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.5rem 1rem; flex: 1; }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.35rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h2 { font-size: 1.2rem; margin-bottom: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+        .form-group { margin-bottom: 0.85rem; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; color: var(--text-muted); }
+        input, select {
+            width: 100%; padding: 0.7rem; background-color: var(--bg-input);
+            border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 0.9rem;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
+
+        .categories-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+        .category-option {
+            background-color: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: 10px; padding: 0.75rem; cursor: pointer;
+        }
+        .category-option.selected { border-color: var(--primary); background-color: rgba(163, 230, 53, 0.08); }
+        .category-name { font-weight: 800; font-size: 0.85rem; color: var(--text-main); }
+        .category-desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        .simulation-result {
+            background-color: #171d15; border-radius: 12px; padding: 1rem; margin-top: 1rem;
+            border: 1px solid rgba(163, 230, 53, 0.3);
+        }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
+        .result-total {
+            display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 900;
+            color: var(--primary); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: block; width: 100%; padding: 0.85rem; background-color: var(--primary);
+            color: #050802; font-weight: 800; text-align: center; border: none; border-radius: 10px;
+            cursor: pointer; font-size: 0.95rem; margin-top: 0.85rem;
+        }
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: #27272a; color: var(--text-main); border: 1px solid var(--border-color); }
+
+        .flow-screen { display: none; }
+        .flow-screen.active { display: block; }
+
+        .pix-box { background: #09090b; border: 2px dashed var(--pix
